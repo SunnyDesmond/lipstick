@@ -1,0 +1,39 @@
+body{
+  background: #fff !important;
+}
+.top-font{
+  font-size: 28px;
+  font-weight: 500;
+}
+.home_body{
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 20px;
+}
+.line{
+  width: 100%;
+  border: 1px solid #efefef;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.content{
+  color: #333;
+}
+.rule-title{
+  color: #333;
+  font-weight: 500;
+  margin: 10px auto;
+}
+.qrcode-img{
+  text-align: center;
+}
+.thead-default{
+  background: #f0f0f0;
+}
+.tips{
+  color: rgb(123, 127, 131);
+  font-size: 12px;
+}
+.ql-editor{
+  line-height: 30px;
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ch-zn" style="font-size: 79.5424px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>明星同款GO</title>
+    <link rel="stylesheet" href="./assets/css/game.css?v=2">
+    <script type="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/bodymovin.js"></script>
+    <script type="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/jweixin-1.3.2.js"></script>
+    <script typet="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/jquery.cookie.js"></script>
+    <script type="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/JicemoonMobileTouch.js"></script>
+    <script type="text/javascript" src="./assets/js/HardestGame.js?v=1"></script>
+    <script type="text/javascript" src="./assets/js/index.js?v=1"></script>
+    <script type="text/javascript" src="https://static.jammyfm.com/media/image/songquiz_assets/mxtkgo/vconsole.min.js"></script>
+</head>
+
+<body>
+    <audio id="back_music" preload="" autoplay src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/bg_audio.mp3" loop="true"></audio>
+    <audio id="split_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/split_audio.mp3"></audio>
+    <audio id="collision_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/collision_audio.mp3"></audio>
+    <audio id="Countdown_10s_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/Countdown_10s_audio.mp3"></audio>
+    <audio id="gameFail_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/gameFail_audio.mp3"></audio>
+    <audio id="gameSuccess_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/gameSuccess_audio.mp3"></audio>
+    <audio id="insert_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/insert_audio.mp3"></audio>
+    <audio id="success_audio" preload="" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/success_audio.mp3"></audio>
+    <!-- 关卡提示 -->
+    <div class="levelSwitchBox" id="levelSwitchBox" style="display: block;">
+        <img id="levelSwitchBoxMain" class="levelSwitchBoxMain" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/level_1_main_true.png">
+    </div>
+   
+
+<!-- 游戏失败提示 -->
+    <div class="PopupBox" id="gameOverBox" style="display: none;">
+        <div class="gameOver-title"></div>
+        <div class="gameOver-btn-wrap">
+            <!-- 继续挑战 -->
+            <div class="end-game-btn" id='end-game-btn'></div>
+                <!-- 直接购买 -->
+            <div class="buy-btn-light" id='buy-btn-light'></div>
+        </div>
+        <!-- <div id="gameOverBoxTitle">闯关失败</div>
+        <div class="PopupBoxBtn" id="gameOverBoxBtn">重新闯关</div> -->
+    </div>
+    <!-- 游戏胜利提示 -->
+    <div class="PopupBox" id="gameSuccessBox" style="display: none;">
+        <div class="gameWin-title"></div>
+        <div class="gameWin-btn-wrap">
+            <div class="get-challange-btn" id='get-challange-btn'></div>
+            <div class="buy-btn-gray" id="buy-btn-gray"></div>
+        </div>
+        <!-- <div id="gameSuccessBoxText">体验结束</div>
+        <div class="PopupBoxBtn" id="gameSuccessBoxBtn">马上赢口红</div> -->
+    </div>
+
+    <div class="layoutRoot" id="app">
+        <div class="game" id="game" style="width: 596px; height: 938px;">
+            <div class="account">
+                <span></span>
+            </div>
+            <div class="title-box">
+                <!-- 倒计时 -->
+                <div id="timebox"></div>
+                 <!-- 子弹数 -->
+            <div class="bulletsNumBox">
+                <span class="bulletsNum"></span>
+                <i class="bullet-icon"></i>
+            </div>
+            </div>
+
+            <canvas style="position: relative;z-index: 300" id="gameStage" width="596" height="938"></canvas>
+            
+            <div id="bm" style=" width: 100%; height: 100%;position: fixed;background-color: rgba(0,0,0,0);top: 5.3rem; transform: translate(-5%,-1%); z-index: 2">
+            </div>
+            <div class="tips">
+                <p id="currentLevel">当前关数: <span>2</span></p>
+                <p id="gameTip"></p>
+            </div>
+            <!-- 关卡 -->
+            <div class="levelbox" id="levelbox">
+                <div class="level"><img id="level_1" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/level1-icon.png"></div>
+                <div class="level"><img id="level_2" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/level2-icon.png"></div>
+                <div class="level"><img id="level_3" src="https://img.jammyfm.com/media/image/songquiz_assets/mxtkgo/level3-icon-empty.png"></div>
+                <div class="level-count">第一关</div>
+            </div>
+            <!-- 明星头像 -->
+            <img class="star-avatar" id="star-avatar"></img>
+            
+        </div>
+         <!-- toast 提示 -->
+    <div class="toastTips" id="toastTips"></div>
+    </div>
+    <script type="text/javascript">
+    // var vconsole = new VConsole();
+        var loadedMusic = false;
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
+        }, {
+            passive: false
+        });
+        var baseUrl = function GetRequest() {
+            var url = location.search; //获取url中"?"符后的字符串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                url = url.split("?")[1];
+                strs = url.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+
+        }
+        var jsonParamsAlias = baseUrl();
+        // var jsonParams = {
+        //     "game_id" : jsonParamsAlias.gid,
+        //     "game_pay" : jsonParamsAlias.pay,
+        //     "product_id" : jsonParamsAlias.pid,
+        //     "randomNum" : jsonParamsAlias.rand,
+        //     "forecast_result": jsonParamsAlias.res,
+        //     "user_id" : jsonParamsAlias.uid
+        // }
+        var jsonParams = {
+            "game_id": "",
+            "game_pay": "",
+            "product_id": "",
+            "randomNum": "",
+            "forecast_result": "",
+            "user_id": ""
+        }
+        if(jsonParamsAlias.avatar){
+            $('#star-avatar').attr("src",jsonParamsAlias.avatar)
+        }
+
+        if (jsonParamsAlias.slient) {
+            $('audio').prop('muted', true);
+        }
+        if (jsonParamsAlias.h5 && jsonParamsAlias.h5 == "1") {
+            window.isH5 = true;
+        }
+        var cookieDelTime = new Date(Math.floor(new Date(new Date().getTime() + 150000)));
+        $.cookie('game_cookie', null);
+        $.cookie('game_cookie', JSON.stringify(jsonParams), {
+            expires: cookieDelTime
+        });
+        console.log($.cookie('game_cookie'));
+        var anim = bodymovin.loadAnimation({
+            wrapper: document.querySelector('#bm'),
+            animType: 'svg',
+            loop: false,
+            autoplay: false,
+            prerender: true,
+            path: './assets/data.json'
+        });
+
+        function play() {
+            anim.goToAndStop(0, true)
+            anim.play()
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            audioAutoPlay();
+        });
+
+        function audioAutoPlay() {
+            var audio = document.getElementById('back_music');
+            audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function() {
+                audio.play();
+            }, false);
+        }
+        document.addEventListener('visibilitychange', function(e) {
+            function audioStop() {
+                var audio = document.getElementById('back_music');
+                document.hidden ? audio.pause() : audio.play();
+                document.addEventListener("WeixinJSBridgeReady", function() {
+                    document.hidden ? audio.pause() : audio.play();
+                }, false);
+            }
+            audioStop();
+        });
+    </script>
+</body>
+
+</html>
